@@ -2,16 +2,17 @@ HardwareSerial mySerial(2);
 
 void setup() {
   Serial.begin(115200);
-  delay(3000);   // IMPORTANT: wait for serial monitor
+  mySerial.begin(9600, SERIAL_8N1, 16, 17);
 
   Serial.println("RECEIVER READY");
-
-  mySerial.begin(9600, SERIAL_8N1, 16, 17);
 }
 
 void loop() {
-  if (mySerial.available()) {
+  while (mySerial.available()) {
     String msg = mySerial.readStringUntil('\n');
-    Serial.println(msg);
+    msg.trim();                 // remove \r or spaces
+    if (msg.length() > 0) {
+      Serial.println(msg);      // send to USB (Python reads this)
+    }
   }
 }
