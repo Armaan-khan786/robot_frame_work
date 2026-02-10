@@ -15,5 +15,3 @@ String msg = mySerial.readStringUntil('\n');
 Serial.println(msg);
 }
 }
-
-Update
