@@ -103,14 +103,26 @@ String steps[100] = {
 "STEP100: ESP32 Test Complete"
 };
 
+int stepIndex = 0;
+unsigned long previousMillis = 0;
+const unsigned long interval = 300;   // 300 ms delay
+
 void setup() {
   mySerial.begin(9600, SERIAL_8N1, 16, 17);
-  delay(3000);
-
-  for (int i = 0; i < 100; i++) {
-    mySerial.println(steps[i]);
-    delay(300);
-  }
 }
 
-void loop() {}
+void loop() {
+
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+
+    mySerial.println(steps[stepIndex]);
+    stepIndex++;
+
+    if (stepIndex >= 100) {
+      stepIndex = 0;   // restart from STEP1
+    }
+  }
+}
